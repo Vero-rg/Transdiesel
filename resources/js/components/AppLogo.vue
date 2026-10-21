@@ -1,19 +1,23 @@
 <script setup lang="ts">
 import { usePage } from '@inertiajs/vue3';
-import AppLogoIcon from '@/components/AppLogoIcon.vue';
+import { computed } from 'vue';
 
-const name = usePage().props.name;
+const page = usePage();
+
+const logo = computed(
+    () => page.props.brand.logo ?? '/images/logo-transdiesel.png',
+);
 </script>
 
 <template>
-    <div
-        class="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground"
+    <img
+        :src="logo"
+        alt="Transdiesel"
+        class="h-11 w-auto max-w-full rounded-md bg-white object-contain p-1 group-data-[collapsible=icon]:hidden"
+    />
+    <span
+        class="hidden size-8 items-center justify-center rounded-md bg-sidebar-primary text-[10px] font-black tracking-tight text-sidebar-primary-foreground group-data-[collapsible=icon]:flex"
     >
-        <AppLogoIcon class="size-5 fill-current text-white dark:text-black" />
-    </div>
-    <div class="ml-1 grid flex-1 text-left text-sm">
-        <span class="mb-0.5 truncate leading-tight font-semibold">{{
-            name
-        }}</span>
-    </div>
+        TD
+    </span>
 </template>
