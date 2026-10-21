@@ -38,10 +38,30 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'name' => config('app.name'),
+            'brand' => [
+                'logo' => $this->brandAsset('logo-transdiesel'),
+                'logo_white' => $this->brandAsset('logo-transdiesel-blanco'),
+            ],
             'auth' => [
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
+    }
+
+    /**
+     * Resolve the URL of a brand image stored in public/images, or null when it is missing.
+     */
+    private function brandAsset(string $name): ?string
+    {
+        foreach (['png', 'svg', 'webp', 'avif', 'jpg', 'jpeg', 'jfif'] as $extension) {
+            $path = "images/{$name}.{$extension}";
+
+            if (is_file(public_path($path))) {
+                return "/{$path}";
+            }
+        }
+
+        return null;
     }
 }

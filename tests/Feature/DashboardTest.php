@@ -7,10 +7,16 @@ test('guests are redirected to the login page', function () {
     $response->assertRedirect(route('login'));
 });
 
-test('authenticated users can visit the dashboard', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
+test('administrators are redirected to the product inventory', function () {
+    $this->actingAs(User::factory()->admin()->create());
 
-    $response = $this->get(route('dashboard'));
-    $response->assertOk();
+    $this->get(route('dashboard'))
+        ->assertRedirect(route('admin.products.index'));
+});
+
+test('regular users are redirected to the home page', function () {
+    $this->actingAs(User::factory()->create());
+
+    $this->get(route('dashboard'))
+        ->assertRedirect(route('home'));
 });
